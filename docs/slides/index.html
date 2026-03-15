@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Director's Eye - Pitch Deck</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --dark: #0f172a;
+      --darker: #020617;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      overflow: hidden;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 80px;
+      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .slide-content {
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: var(--light);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    p {
+      font-size: 1.4rem;
+      line-height: 1.8;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .tagline {
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .highlight {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      font-size: 1.3rem;
+    }
+
+    li {
+      padding: 0.8rem 0;
+      padding-left: 2rem;
+      position: relative;
+      color: var(--light);
+    }
+
+    li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .card h3 {
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .stat-value {
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      color: var(--gray);
+    }
+
+    .flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 3rem 0;
+    }
+
+    .flow-step {
+      text-align: center;
+      flex: 1;
+    }
+
+    .flow-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .flow-arrow {
+      font-size: 2rem;
+      color: var(--primary);
+      flex: 0 0 auto;
+      padding: 0 1rem;
+    }
+
+    .flow-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light);
+      margin-bottom: 0.5rem;
+    }
+
+    .flow-desc {
+      font-size: 1rem;
+      color: var(--gray);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 1.1rem;
+    }
+
+    th, td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+    }
+
+    th {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      color: var(--light);
+    }
+
+    tr:hover td {
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+    }
+
+    .badge-primary {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--primary);
+    }
+
+    .quote {
+      font-size: 1.8rem;
+      font-style: italic;
+      color: var(--light);
+      border-left: 4px solid var(--primary);
+      padding-left: 2rem;
+      margin: 2rem 0;
+    }
+
+    .quote-author {
+      font-size: 1.2rem;
+      color: var(--gray);
+      font-style: normal;
+      margin-top: 1rem;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .cta-box h2 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .cta-box p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.3rem;
+    }
+
+    .cta-link {
+      display: inline-block;
+      background: white;
+      color: var(--primary-dark);
+      padding: 1rem 3rem;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-link:hover {
+      transform: scale(1.05);
+    }
+
+    .architecture {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      padding: 2rem;
+      font-family: 'Fira Code', 'Monaco', monospace;
+      font-size: 0.95rem;
+      white-space: pre;
+      overflow-x: auto;
+      color: var(--light);
+      line-height: 1.6;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: 3px solid var(--darker);
+    }
+
+    .timeline-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-content {
+      color: var(--light);
+      font-size: 1.1rem;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 1rem;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .nav-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      background: transparent;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: var(--gray);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    /* Title slide special styling */
+    .slide-title {
+      text-align: center;
+    }
+
+    .slide-title h1 {
+      font-size: 5rem;
+    }
+
+    .logo {
+      font-size: 6rem;
+      margin-bottom: 2rem;
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      color: var(--gray);
+      margin-top: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 40px;
+      }
+      
+      h1 {
+        font-size: 3rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      
+      .flow {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  
+  <div class="deck" id="deck">
+    
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title active">
+      <div class="slide-content">
+        <div class="logo">🎬</div>
+        <h1>Director's Eye</h1>
+        <p class="tagline">"Describe your vision. Step inside it. Direct from within."</p>
+        <p style="font-size: 1.5rem; color: var(--light);">VR Pre-Visualization for Every Filmmaker</p>
+        <p class="subtitle">Worlds in Action Hack - San Francisco<br>Best Filmmaking, Entertainment App</p>
+      </div>
+    </div>
+
+    <!-- Slide 2: Problem -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>The Problem: Pre-Visualization is Broken</h2>
+        
+        <div class="grid grid-3">
+          <div class="stat">
+            <span class="stat-value">$100K+</span>
+            <span class="stat-label">Cost of professional previs</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">2D</span>
+            <span class="stat-label">Storyboards can't show space</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">90%</span>
+            <span class="stat-label">Filmmakers locked out</span>
+          </div>
+        </div>
+
+        <div class="quote">
+          "I didn't know the shot wouldn't work until we were on location with 50 crew members waiting."
+          <div class="quote-author">— Every indie director ever</div>
+        </div>
+
+        <p style="text-align: center; font-size: 1.5rem; color: var(--light);">
+          Directors need to <span class="highlight">FEEL</span> their scenes before they shoot them.
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 3: Solution -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>The Solution: Director's Eye</h2>
+        <p>AI-Powered Spatial Pre-Visualization</p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-icon">🗣️</div>
+            <div class="flow-title">Speak</div>
+            <div class="flow-desc">"A rooftop at night,<br>neon city below"</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon">🌍</div>
+            <div class="flow-title">Generate</div>
+            <div class="flow-desc">AI creates the 3D<br>environment around you</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon">🎬</div>
+            <div class="flow-title">Direct</div>
+            <div class="flow-desc">Place actors, frame shots,<br>capture storyboard</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-icon">✨</div>
+            <div class="flow-title">Refine</div>
+            <div class="flow-desc">"Add fog, make it sunset"<br>Scene updates instantly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Demo -->
+    <div class="slide">
+      <div class="slide-content" style="text-align: center;">
+        <h2>See It In Action</h2>
+        
+        <div style="background: var(--dark); border-radius: 24px; padding: 4rem; margin: 2rem 0; border: 2px solid var(--primary);">
+          <p style="font-size: 8rem; margin: 0;">▶️</p>
+          <p style="font-size: 2rem; color: var(--light); margin-top: 2rem;">LIVE DEMO / VIDEO</p>
+        </div>
+
+        <div class="cta-box">
+          <h2>Try It Yourself</h2>
+          <p>No download required. Works in your browser.</p>
+          <a href="#" class="cta-link">directors-eye.vercel.app</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Architecture -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>How It Works</h2>
+        
+        <div class="architecture">┌─────────────────────────────────────────────────────────┐
+│                      USER INPUT                          │
+│         Voice: "A jazz club at night, smoky, spotlight"  │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│                   BACKEND (FastAPI)                      │
+│                                                          │
+│   🎤 OpenAI Whisper  ───────▶  🌍 World Labs Marble API  │
+│      Voice → Text              Text → 3D Environment     │
+│                                                          │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│              FRONTEND (WebXR / Desktop / VR)             │
+│                                                          │
+│   🎭 Actors    📷 Cameras    🎬 Shots    🗣️ Refine       │
+│                                                          │
+└─────────────────────────────────────────────────────────┘</div>
+
+        <div class="grid" style="margin-top: 2rem;">
+          <div class="card">
+            <h3>🌍 World Labs Marble API</h3>
+            <p>AI-powered 3D world generation from text descriptions</p>
+          </div>
+          <div class="card">
+            <h3>🎤 OpenAI Whisper</h3>
+            <p>Voice-to-text for natural language scene creation</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Platform Strategy -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>One Tool, Every Platform</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Use Case</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🌐 <strong>WebXR</strong></td>
+              <td>Browser-based, share demo link, Quest/Pico compatible</td>
+              <td><span class="badge badge-success">Primary</span></td>
+            </tr>
+            <tr>
+              <td>🖥️ <strong>Desktop</strong></td>
+              <td>No VR hardware needed, keyboard/mouse control</td>
+              <td><span class="badge badge-success">Fallback</span></td>
+            </tr>
+            <tr>
+              <td>🥽 <strong>Pico VR</strong></td>
+              <td>Best immersive experience, native performance</td>
+              <td><span class="badge badge-warning">Optional</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="quote" style="margin-top: 3rem;">
+          Same backend. Same features. Maximum reach.
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Market -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Market Opportunity</h2>
+
+        <div class="grid">
+          <div>
+            <h3>Target Users</h3>
+            <table>
+              <tr>
+                <td>🎬 Indie Filmmakers</td>
+                <td>500K+ active</td>
+              </tr>
+              <tr>
+                <td>🎓 Film Students</td>
+                <td>200K+ enrolled</td>
+              </tr>
+              <tr>
+                <td>📱 YouTube Creators</td>
+                <td>50M+ channels</td>
+              </tr>
+              <tr>
+                <td>📺 Ad Agencies</td>
+                <td>100K+ agencies</td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <h3>Market Size</h3>
+            <div class="stat">
+              <span class="stat-value">$250M</span>
+              <span class="stat-label">Pre-viz market (2024)</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">$15B</span>
+              <span class="stat-label">XR content creation (2028)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Competitive Advantage -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Why Director's Eye Wins</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Traditional Previs</th>
+              <th>Director's Eye</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cost</td>
+              <td>$10K - $100K</td>
+              <td><span class="highlight">Free / Low-cost</span></td>
+            </tr>
+            <tr>
+              <td>Setup Time</td>
+              <td>Weeks</td>
+              <td><span class="highlight">Minutes</span></td>
+            </tr>
+            <tr>
+              <td>Iteration</td>
+              <td>Days per revision</td>
+              <td><span class="highlight">Seconds (voice)</span></td>
+            </tr>
+            <tr>
+              <td>Experience</td>
+              <td>View on screen</td>
+              <td><span class="highlight">Walk through it</span></td>
+            </tr>
+            <tr>
+              <td>Skill Required</td>
+              <td>3D artists</td>
+              <td><span class="highlight">Just speak</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 9: Roadmap -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Development Roadmap</h2>
+
+        <div class="grid">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-title">Phase 1: Hackathon MVP ✅</div>
+              <div class="timeline-content">Voice-to-scene, actor placement, virtual camera, shot capture</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Phase 2: Post-Hackathon (Month 1-2)</div>
+              <div class="timeline-content">Multi-user collaboration, animation library, cloud sync</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Phase 3: Production (Month 3-6)</div>
+              <div class="timeline-content">Unreal export, AR location scouting, AI shot suggestions</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-title">Phase 4: Platform (Month 6-12)</div>
+              <div class="timeline-content">Marketplace, community assets, enterprise licensing</div>
+            </div>
+          </div>
+          <div>
+            <h3>MVP Features</h3>
+            <ul>
+              <li>✅ Voice-to-scene generation</li>
+              <li>✅ Actor placement & posing</li>
+              <li>✅ Virtual camera with viewfinder</li>
+              <li>✅ Shot capture & metadata</li>
+              <li>✅ Scene refinement via voice</li>
+              <li>✅ Export shot list</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Business Model -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Business Model</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Tier</th>
+              <th>Price</th>
+              <th>Features</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Free</strong></td>
+              <td>$0</td>
+              <td>5 scenes/month, watermarked exports</td>
+            </tr>
+            <tr>
+              <td><strong>Creator</strong></td>
+              <td>$19/mo</td>
+              <td>Unlimited scenes, HD exports, cloud save</td>
+            </tr>
+            <tr>
+              <td><strong>Pro</strong></td>
+              <td>$49/mo</td>
+              <td>Team collaboration, API access, priority rendering</td>
+            </tr>
+            <tr>
+              <td><strong>Studio</strong></td>
+              <td>Custom</td>
+              <td>Enterprise features, SLA, dedicated support</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid grid-3" style="margin-top: 2rem;">
+          <div class="card">
+            <h3>Marketplace</h3>
+            <p>20% cut on community assets</p>
+          </div>
+          <div class="card">
+            <h3>API</h3>
+            <p>Usage-based pricing</p>
+          </div>
+          <div class="card">
+            <h3>Enterprise</h3>
+            <p>Custom deployments</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Why Now -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>Why Now?</h2>
+
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>2023</h3>
+            <p>Text-to-image</p>
+            <p>Expensive VR ($1000+)</p>
+            <p>Novelty</p>
+          </div>
+          <div class="card" style="border-color: var(--primary); background: rgba(99, 102, 241, 0.2);">
+            <h3>2024</h3>
+            <p><strong>Text-to-3D</strong></p>
+            <p><strong>$300 headsets</strong></p>
+            <p><strong>Practical</strong></p>
+          </div>
+          <div class="card">
+            <h3>2025</h3>
+            <p>Text-to-world</p>
+            <p>Browser XR</p>
+            <p>Essential</p>
+          </div>
+        </div>
+
+        <div class="quote" style="margin-top: 3rem;">
+          "The future of content creation is spatial."
+          <div class="quote-author">— Jensen Huang, NVIDIA CEO</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Team -->
+    <div class="slide">
+      <div class="slide-content">
+        <h2>The Team</h2>
+
+        <div class="grid grid-3">
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 5rem;">👨‍💻</div>
+            <h3>Lead Developer</h3>
+            <p>XR/Unity Expert<br>10+ shipped VR apps</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 5rem;">🧠</div>
+            <h3>Backend/AI</h3>
+            <p>ML Engineer<br>AI pipeline specialist</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 5rem;">🎨</div>
+            <h3>Design/Film</h3>
+            <p>Filmmaker & UX<br>Knows the pain firsthand</p>
+          </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 3rem; font-size: 1.3rem;">
+          Combined 10+ years in XR | 100K+ app downloads | Direct filmmaking experience
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 13: CTA -->
+    <div class="slide slide-title">
+      <div class="slide-content">
+        <h1>Try It Now</h1>
+        
+        <div class="cta-box" style="margin-top: 3rem;">
+          <h2>🌐 directors-eye.vercel.app</h2>
+          <p style="font-size: 1.5rem;">Open in any browser. Click "Enter VR" or use desktop mode.<br>Speak your scene into existence.</p>
+          <a href="https://github.com/kevintucker/Director-s-Eye" class="cta-link">View on GitHub →</a>
+        </div>
+
+        <div style="margin-top: 4rem;">
+          <p style="font-size: 1.8rem; color: var(--light);">📧 team@directors-eye.dev</p>
+          <p style="font-size: 1.5rem;">github.com/kevintucker/Director-s-Eye</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 14: Final -->
+    <div class="slide slide-title">
+      <div class="slide-content">
+        <div class="logo">🎬</div>
+        <h1>Director's Eye</h1>
+        <p class="tagline" style="font-size: 2.5rem;">"Every filmmaker deserves to see their vision<br>before they shoot it."</p>
+        
+        <div style="margin-top: 4rem;">
+          <p style="font-size: 1.5rem; color: var(--gray);">Built with</p>
+          <p style="font-size: 1.8rem; color: var(--light);">
+            🌍 World Labs Marble API &nbsp;&nbsp;|&nbsp;&nbsp; 
+            🎤 OpenAI Whisper &nbsp;&nbsp;|&nbsp;&nbsp; 
+            🥽 WebXR / Pico
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">←</button>
+    <div class="slide-counter">
+      <span id="currentSlide">1</span> / <span id="totalSlides">14</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">→</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progress = document.getElementById('progress');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const currentSlideNum = document.getElementById('currentSlide');
+    const totalSlidesNum = document.getElementById('totalSlides');
+
+    totalSlidesNum.textContent = totalSlides;
+
+    function showSlide(n) {
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active');
+        if (index === n) {
+          slide.classList.add('active');
+        }
+      });
+      
+      currentSlide = n;
+      currentSlideNum.textContent = n + 1;
+      progress.style.width = ((n + 1) / totalSlides * 100) + '%';
+      
+      prevBtn.disabled = n === 0;
+      nextBtn.disabled = n === totalSlides - 1;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+
+    // Touch navigation
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    });
+
+    // Initialize
+    showSlide(0);
+  </script>
+</body>
+</html>
